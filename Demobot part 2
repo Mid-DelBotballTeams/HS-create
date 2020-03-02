@@ -1,0 +1,79 @@
+#include <kipr/wombat.h>
+
+int main()
+{
+    enable_servos();
+    set_servo_position(2,730);//open arm
+    msleep(500);
+    
+    cmpc(1);
+    motor(1,-100);// go straight to ramp
+    motor(2,-100);
+    msleep(1800);
+    motor(1,-100);//turn left towards coupler
+    motor(2,-25);
+    msleep(600);
+    motor(1,-100);//go straight to get coupler
+    motor(2,-100);
+    msleep(300);
+    ao();
+    set_servo_position(2,2047);//close arm
+    msleep(700);
+    disable_servos();
+     motor(1,100);//back up and let ramp fall
+    motor(2,100);
+    msleep(300);
+    motor(1,-100);//go forward towards ramp slightly
+    motor(2,-100);
+    msleep(150);
+    motor(1,-100);
+    motor(2,0);
+    msleep(2000);
+      cmpc(2);
+    while(gmpc(2)>-1008)//turn to be even with ramp
+    {
+        motor(1,-100);
+        motor(2,0);
+    }   
+    while(digital(0)==0)
+    {
+        if(analog(0)>-1200)// go up ramp
+        {
+            motor(1,-90);
+            motor(2,-10);
+        }
+        else
+        {
+            motor(1,-10);
+            motor(2,-90);
+        }
+    }
+        motor(1,-100);// backup on the ramp a little bit
+        motor(2,-100);
+        msleep(200);
+        
+        motor(1,25);// turn left onto platform
+        motor(2,100);
+        msleep(400);
+        
+            while(digital(0)==0)
+    {
+        if(analog(0)<600)// go forward on platform
+        {
+            motor(1,90);
+            motor(2,10);
+        }
+        else
+        {
+            motor(1,10);
+            motor(2,90);
+        
+        }
+    }
+    
+
+   
+   
+    
+    return 0;
+}
